@@ -258,6 +258,7 @@
                 const students = data.students;
                 const attendance = data.attendance;
 
+<<<<<<< HEAD
                 const presentStudents = students.filter(s => {
                     let val = attendance[s.id];
                     let k = typeof val === 'object' ? val.status : val;
@@ -278,6 +279,15 @@
                     let val = attendance[s.id];
                     return (typeof val === 'object' ? val.status : val) === 'a';
                 });
+=======
+                const presentStudents = students.filter(s => attendance[s.id] === 'p' || attendance[s.id] === 'l');
+                const malesPresent = presentStudents.filter(s => s.gender === 'ชาย' || s.gender === 'm').length;
+                const femalesPresent = presentStudents.filter(s => s.gender === 'หญิง' || s.gender === 'f').length;
+
+                const sickStudents = students.filter(s => attendance[s.id] === 's');
+                const businessStudents = students.filter(s => attendance[s.id] === 'b');
+                const absentStudents = students.filter(s => attendance[s.id] === 'a');
+>>>>>>> main
 
                 let reportText = `วันที่ ${formattedDate}\n`;
                 reportText += `ระดับชั้น ${className}\n`;
@@ -288,29 +298,41 @@
 
                 if (sickStudents.length > 0) {
                     reportText += `ลาป่วย ${sickStudents.length} คน\n`;
+<<<<<<< HEAD
                     sickStudents.forEach(s => {
                         let val = attendance[s.id];
                         let remark = typeof val === 'object' && val.remark ? ` (${val.remark})` : '';
                         reportText += `- ${s.name}${remark}\n`;
                     });
+=======
+                    sickStudents.forEach(s => reportText += `- ${s.name}\n`);
+>>>>>>> main
                 }
 
                 if (businessStudents.length > 0) {
                     reportText += `${sickStudents.length > 0 ? '\n' : ''}ลากิจ ${businessStudents.length} คน\n`;
+<<<<<<< HEAD
                     businessStudents.forEach(s => {
                         let val = attendance[s.id];
                         let remark = typeof val === 'object' && val.remark ? ` (${val.remark})` : '';
                         reportText += `- ${s.name}${remark}\n`;
                     });
+=======
+                    businessStudents.forEach(s => reportText += `- ${s.name}\n`);
+>>>>>>> main
                 }
 
                 if (absentStudents.length > 0) {
                     reportText += `${(sickStudents.length > 0 || businessStudents.length > 0) ? '\n' : ''}ขาด ${absentStudents.length} คน\n`;
+<<<<<<< HEAD
                     absentStudents.forEach(s => {
                         let val = attendance[s.id];
                         let remark = typeof val === 'object' && val.remark ? ` (${val.remark})` : '';
                         reportText += `- ${s.name}${remark}\n`;
                     });
+=======
+                    absentStudents.forEach(s => reportText += `- ${s.name}\n`);
+>>>>>>> main
                 }
 
                 const textArea = document.createElement("textarea");
@@ -372,6 +394,7 @@
                                             let remark = typeof attVal === 'object' ? attVal.remark : '';
                                             const status = STATUS_MAP[statusKey];
                                             return (
+<<<<<<< HEAD
                                                 <div key={s.id} className="flex flex-col p-3 bg-gray-50 rounded-2xl border border-white mb-2">
                                                     <div className="flex items-center justify-between">
                                                         <div className="flex items-center gap-3">
@@ -379,6 +402,18 @@
                                                             <span className="text-sm font-medium text-gray-700">
                                                                 {s.name} {s.nickname && <span className="text-gray-400 font-normal">({s.nickname})</span>}
                                                             </span>
+=======
+                                                <div key={s.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-white">
+                                                    <div className="flex items-center gap-3">
+                                                        <span className="text-[14px] font-bold text-gray-300 w-4">{s.no}</span>
+                                                        <span className="text-sm font-medium text-gray-700">
+                                                            {s.name} {s.nickname && <span className="text-gray-400 font-normal">({s.nickname})</span>}
+                                                        </span>
+                                                    </div>
+                                                    {status && (
+                                                        <div className={`${status.color} text-white text-[12px] font-bold px-3 py-1 rounded-full shadow-sm`}>
+                                                            {status.label}
+>>>>>>> main
                                                         </div>
                                                         {status && (
                                                             <div className={`${status.color} text-white text-[12px] font-bold px-3 py-1 rounded-full shadow-sm`}>
@@ -931,12 +966,19 @@
                                                 personalReport.logs.map((log, idx) => {
                                                     const status = STATUS_MAP[log.status];
                                                     return (
+<<<<<<< HEAD
                                                         <div key={idx} className="flex flex-col p-3 bg-gray-50 rounded-2xl border border-white mb-2">
                                                             <div className="flex items-center justify-between">
                                                                 <span className="text-xs font-bold text-gray-600">{formatDisplayDate(log.date)}</span>
                                                                 <div className={`${status.color} text-white text-[12px] font-bold px-3 py-1 rounded-full`}>
                                                                     {status.label}
                                                                 </div>
+=======
+                                                        <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-white">
+                                                            <span className="text-xs font-bold text-gray-600">{formatDisplayDate(log.date)}</span>
+                                                            <div className={`${status.color} text-white text-[12px] font-bold px-3 py-1 rounded-full`}>
+                                                                {status.label}
+>>>>>>> main
                                                             </div>
                                                             {log.remark && <div className="mt-2 text-[12px] text-gray-500 bg-yellow-50 p-2 rounded-lg border border-gray-100 overflow-x-auto whitespace-nowrap max-w-full">หมายเหตุ: {log.remark}</div>}
                                                         </div>
