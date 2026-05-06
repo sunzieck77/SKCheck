@@ -11,7 +11,7 @@
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
+                navigator.serviceWorker.register('./service-worker.js')
                 .then(reg => console.log('SW registered'))
                 .catch(err => console.log('SW error', err));
             });
@@ -86,6 +86,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            aspect-ratio: 1 / 1;
         }
 
         .shining-effect {
@@ -453,8 +454,12 @@
                         
                         <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between text-white">
                             <div className="flex items-center gap-4">
-                                <div className="logo-container w-14 h-14 bg-white/90 shadow-lg p-0.5 border border-white/20">
-                                    <img src={SCHOOL_LOGO} alt="School Logo" className="w-full h-full object-contain rounded-full" />
+                                <div className="logo-container w-16 h-16 sm:w-14 sm:h-14 shrink-0 bg-white/90 shadow-lg border border-white/20 flex items-center justify-center">
+                                    <img 
+                                    src={SCHOOL_LOGO} 
+                                    alt="School Logo" 
+                                    className="w-[85%] h-[85%] object-contain"
+                                    />
                                 </div>
                                 <div>
                                     <h1 className="text-xl font-extrabold tracking-tighter leading-tight drop-shadow-md">โรงเรียนสกลวิทยา</h1>
