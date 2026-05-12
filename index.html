@@ -808,7 +808,6 @@
                     if (!groups[level]) groups[level] = [];
                     groups[level].push({ id, ...c });
                 });
-                // Sort within groups
                 Object.keys(groups).forEach(level => {
                     groups[level].sort((a, b) => (a.room || 0) - (b.room || 0));
                 });
@@ -821,7 +820,10 @@
                 let totalStudents = 0; let summary = { p: 0, l: 0, a: 0, s: 0, b: 0 };
                 Object.keys(classes).forEach(classId => {
                     totalStudents += Object.keys(studentsData[classId] || {}).length;
-                    Object.values(reportData[classId] || {}).forEach(status => { if (summary[status] !== undefined) summary[status]++; });
+                    Object.values(reportData[classId] || {}).forEach(statusVal => { 
+                        let status = typeof statusVal === 'object' ? statusVal.status : statusVal;
+                        if (summary[status] !== undefined) summary[status]++; 
+                    });
                 });
                 return { totalStudents, summary };
             }, [classes, studentsData, reportData]);
@@ -1011,7 +1013,7 @@
                                                                         <div className="grid grid-cols-5 gap-2">
                                                                             {Object.entries(STATUS_MAP).map(([key, val]) => (
                                                                                 <div key={key} className={`${val.light} p-3 rounded-2xl text-center`}>
-                                                                                    <div className={`${val.text} font-black text-lg`}>{vals.filter(v=>v===key).length}</div>
+                                                                                    <div className={`${val.text} font-black text-lg`}>{vals.filter(v=>(typeof v === 'object' ? v.status : v)===key).length}</div>
                                                                                     <div className={`${val.text} text-[12px] font-bold`}>{val.label}</div>
                                                                                 </div>
                                                                             ))}

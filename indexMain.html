@@ -946,7 +946,7 @@
                                             {Object.entries(STATUS_MAP).map(([key, val]) => (
                                                 <div key={key} className={`${val.light} p-3 rounded-2xl text-center`}>
                                                     <div className={`${val.text} font-black text-xl`}>{schoolSummary.summary[key]}</div>
-                                                    <div className={`${val.text} text-[8px] font-bold`}>{val.label}</div>
+                                                    <div className={`${val.text} text-[12px] font-bold`}>{val.label}</div>
                                                 </div>
                                             ))}
                                         </div>
@@ -990,7 +990,7 @@
                                                                             {Object.entries(STATUS_MAP).map(([key, val]) => (
                                                                                 <div key={key} className={`${val.light} p-3 rounded-2xl text-center`}>
                                                                                     <div className={`${val.text} font-black text-lg`}>{vals.filter(v=>(typeof v === 'object' ? v.status : v)===key).length}</div>
-                                                                                    <div className={`${val.text} text-[8px] font-bold`}>{val.label}</div>
+                                                                                    <div className={`${val.text} text-[12px] font-bold`}>{val.label}</div>
                                                                                 </div>
                                                                             ))}
                                                                         </div>
