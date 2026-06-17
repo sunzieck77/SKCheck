@@ -165,11 +165,16 @@
             } 
         };
         window.dispatchEvent(new Event('firebase-ready'));
+    Babel.registerPreset('react-classic', {
+        presets: [
+            [Babel.availablePresets['react'], { runtime: 'classic' }]
+        ]
+    });
     </script>
-
-    <script type="text/babel">
+   
+    <script type="text/babel" data-presets="react-classic">
+   
         const { useState, useEffect, useMemo, useCallback } = React;
-
         const SCHOOL_LOGO = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSALx--APIlNcrPDzl7sIWS_1Pv_ThBQ2ooQg&s";
         const HEADER_BG = "https://i.ibb.co/mCGCGrbp/Sakolwittaya-Design.jpg";
 
@@ -209,7 +214,8 @@
             ToggleOn: () => <i className="ri-toggle-fill text-[40px] text-green-500"></i>,
             ToggleOff: () => <i className="ri-toggle-line text-[40px] text-gray-300"></i>,
             ArrowDown: () => <i className="ri-arrow-down-s-line text-[20px]"></i>,
-            ArrowUp: () => <i className="ri-arrow-up-s-line text-[20px]"></i>
+            ArrowUp: () => <i className="ri-arrow-up-s-line text-[20px]"></i>,
+            Refresh: () => <i className="ri-refresh-line text-[22px]"></i>,
         };
 
         const STATUS_MAP = {
@@ -1043,6 +1049,58 @@
             const [editingClass, setEditingClass] = useState(null);
             const [isAdmin, setIsAdmin] = useState(false);
 
+            // ฟังก์ชันสำหรับเคลียร์ Cache และ Service Worker
+            const handleClearCache = async () => {
+                const { isConfirmed } = await Swal.fire({
+                    title: 'ล้างแคชระบบ?',
+                    text: 'การล้างแคชจะช่วยแก้ปัญหาแอปไม่ยอมอัปเดต หรือค้าง หลังจากล้างแคชแล้วระบบจะรีเฟรชหน้าเว็บใหม่',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#E60050',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ยืนยันล้างแคช',
+                    cancelButtonText: 'ยกเลิก'
+                });
+
+                if (isConfirmed) {
+                    try {
+                        // 1. ยกเลิก Service Worker
+                        //if ('serviceWorker' in navigator) {
+                        //    const registrations = await navigator.serviceWorker.getRegistrations();
+                        //    for (let registration of registrations) {
+                        //        await registration.unregister();
+                        //    }
+                        //}
+                        
+                        // 2. ล้าง Cache Storage
+                        if ('caches' in window) {
+                            const cacheNames = await caches.keys();
+                            for (let cacheName of cacheNames) {
+                                await caches.delete(cacheName);
+                            }
+                        }
+
+                        // 3. ล้าง Local/Session Storage
+                        localStorage.clear();
+                        sessionStorage.clear();
+
+                        await Swal.fire({
+                            icon: 'success',
+                            title: 'ล้างแคชสำเร็จ',
+                            text: 'ระบบกำลังเริ่มทำงานใหม่',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        // 4. รีเฟรชหน้าเว็บแบบ Hard Reload
+                        window.location.reload(true);
+                    } catch (err) {
+                        console.error('Clear Cache Error:', err);
+                        Swal.fire('Error', 'เกิดข้อผิดพลาดในการล้างแคช', 'error');
+                    }
+                }
+            };
+
             const handleAdminLogin = async () => {
                 const { value: formValues } = await Swal.fire({
                     title: 'เข้าสู่ระบบผู้ดูแลระบบ',
@@ -1169,6 +1227,21 @@
                                     <div className="text-left">
                                         <div className="font-bold text-gray-800 text-lg">สิทธิ์ Premium</div>
                                         <div className="text-xs text-gray-400 font-medium uppercase tracking-widest">Premium Permissions</div>
+                                    </div>
+                                </div>
+                                <Icons.Back className="rotate-180" />
+                            </button>
+
+                            {/* เพิ่มปุ่มเคลียร์แคชตรงนี้ */}
+                            <button onClick={handleClearCache} className="w-full bg-white p-6 rounded-[2rem] flex items-center justify-between shadow-sm border border-gray-100 active:scale-95 transition-transform">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-gray-100 text-gray-500 rounded-full flex items-center justify-center">
+                                        {/* ใช้ไอคอนที่มีอยู่แล้ว หากไม่ได้เพิ่ม Icons.Refresh */}
+                                        <i className="ri-refresh-line text-[22px]"></i>
+                                    </div>
+                                    <div className="text-left">
+                                        <div className="font-bold text-gray-800 text-lg">ล้างแคชระบบ</div>
+                                        <div className="text-xs text-gray-400 font-medium uppercase tracking-widest">Clear App Cache</div>
                                     </div>
                                 </div>
                                 <Icons.Back className="rotate-180" />
