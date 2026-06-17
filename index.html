@@ -1064,13 +1064,12 @@
 
                 if (isConfirmed) {
                     try {
-                        // 1. ยกเลิก Service Worker
-                        //if ('serviceWorker' in navigator) {
-                        //    const registrations = await navigator.serviceWorker.getRegistrations();
-                        //    for (let registration of registrations) {
-                        //        await registration.unregister();
-                        //    }
-                        //}
+                        if ('serviceWorker' in navigator) {
+                            const registrations = await navigator.serviceWorker.getRegistrations();
+                            for (let registration of registrations) {
+                                await registration.unregister();
+                            }
+                        }
                         
                         // 2. ล้าง Cache Storage
                         if ('caches' in window) {
